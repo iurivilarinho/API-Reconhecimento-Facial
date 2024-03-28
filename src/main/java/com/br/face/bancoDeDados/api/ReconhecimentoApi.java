@@ -29,6 +29,7 @@ import org.bytedeco.opencv.opencv_face.EigenFaceRecognizer;
 import org.bytedeco.opencv.opencv_face.FaceRecognizer;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,13 +43,13 @@ public class ReconhecimentoApi {
 	@Autowired
 	private UsuarioService usuarioService;
 
+	@Value("${confianca.reconhecimento}")
+	private int thresholdConfianca;
+
 	@Transactional(readOnly = true)
 	public Usuario reconhecer(List<MultipartFile> files) throws IOException {
 
 		System.setProperty("java.awt.headless", "false");
-		double thresholdConfianca = 9094.0310704250915; // Defina o threshold de confiança adequado para o seu caso
-
-		//double thresholdConfianca = 6094.0310704250915; // Defina o threshold de confiança adequado para o seu caso
 
 		OpenCVFrameConverter.ToMat converteMat = new OpenCVFrameConverter.ToMat();
 
@@ -104,7 +105,6 @@ public class ReconhecimentoApi {
 
 					System.out.println("Desconhecido");
 					System.out.println("confiança:" + confianca.get(0));
-
 
 				} else {
 

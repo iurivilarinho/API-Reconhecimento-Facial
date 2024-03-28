@@ -59,9 +59,15 @@ public class DocumentoService {
 		List<Documento> documentos = documentoRepository.findAll();
 
 		// Ordenar os documentos por ID do usuário
-		documentos = documentos.stream().sorted(Comparator.comparing(doc -> ((Documento) doc).getUsuario().getId()).reversed())
+		documentos = documentos.stream()
+				.sorted(Comparator.comparing(doc -> ((Documento) doc).getUsuario().getId()).reversed())
 				.collect(Collectors.toList());
 
 		return documentos;
+	}
+
+	@Transactional
+	public void deletar(Long idUsuario) {
+		documentoRepository.deleteByUsuario_Id(idUsuario);
 	}
 }

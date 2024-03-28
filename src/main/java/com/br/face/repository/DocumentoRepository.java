@@ -8,4 +8,6 @@ import com.br.face.models.Documento;
 @Repository
 public interface DocumentoRepository extends JpaRepository<Documento, Long>{
 
+	void deleteByUsuario_Id(Long idUsuario);
+
 }

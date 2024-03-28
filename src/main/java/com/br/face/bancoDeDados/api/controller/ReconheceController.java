@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +18,11 @@ import com.br.face.bancoDeDados.api.CapturaApi;
 import com.br.face.bancoDeDados.api.ReconhecimentoApi;
 import com.br.face.models.Usuario;
 
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.EntityNotFoundException;
+
 @RestController
-@RequestMapping("/teste")
+@RequestMapping("/reconhecimento")
 public class ReconheceController {
 
 	@Autowired
@@ -28,28 +31,38 @@ public class ReconheceController {
 	@Autowired
 	private CapturaApi capturaApi;
 
+	@Value("${qtd.imagens.treinamento}")
+	private Integer qtdImagensTreinamento;
+
+	@Value("${qtd.imagens.reconhecimento}")
+	private Integer qtdImagensReconhecimento;
+
 	@PostMapping(consumes = "multipart/form-data")
-	public ResponseEntity<?> reconhecer(@RequestPart List<MultipartFile> files) throws IOException {
+	@Operation(summary = "Reconhecer Usuário", description = "Endpoint para reconhecer um usuário com base nas imagens fornecidas.")
+	public ResponseEntity<Usuario> reconhecer(@RequestPart List<MultipartFile> files) throws IOException {
 
-		if (files.size() > 3 || files.size() < 3) {
+		if (files.size() > qtdImagensReconhecimento || files.size() < qtdImagensReconhecimento) {
 
-			throw new BadRequestException("o número de imagens deve ser igual a 3!");
+			throw new BadRequestException(
+					"o número de imagens deve ser igual a " + qtdImagensReconhecimento.toString() + " !");
 		}
 
 		Usuario usuario = reconhecimentoApi.reconhecer(files);
 		if (usuario != null) {
 			return ResponseEntity.ok(usuario);
 		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum usuário reconhecido.");
+			throw new EntityNotFoundException("Nenhum usuário reconhecido.");
 		}
 	}
 
 	@PostMapping(value = "/{idUsuario}", consumes = "multipart/form-data")
+	@Operation(summary = "Cadastrar Imagens", description = "Endpoint para cadastrar imagens de treinamento para um usuário.")
 	public ResponseEntity<?> cadastrarImagens(@RequestPart List<MultipartFile> files, @PathVariable Long idUsuario)
 			throws InterruptedException, IOException {
-		if (files.size() > 2 || files.size() < 2) {
+		if (files.size() > qtdImagensTreinamento || files.size() < qtdImagensTreinamento) {
 
-			throw new BadRequestException("o número de imagens deve ser igual a 50!");
+			throw new BadRequestException(
+					"o número de imagens deve ser igual a " + qtdImagensTreinamento.toString() + " !");
 		}
 
 		capturaApi.capturar(files, idUsuario);

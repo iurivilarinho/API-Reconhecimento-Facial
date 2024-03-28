@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.br.face.bancoDeDados.TreinamentoBancoDados;
 import com.br.face.models.Documento;
 import com.br.face.models.Usuario;
+import com.br.face.service.ConfereExistenciaFace;
 import com.br.face.service.DocumentoService;
 import com.br.face.service.UsuarioService;
 
@@ -46,12 +47,19 @@ public class CapturaApi {
 	@Autowired
 	private TreinamentoBancoDados treinamentoBancoDados;
 
+	@Autowired
+	private ConfereExistenciaFace confereExistenciaFace;
+
 	@Transactional
 	public void capturar(List<MultipartFile> files, Long idUsuario) throws InterruptedException, IOException {
 
 		System.setProperty("java.awt.headless", "false");
 		OpenCVFrameConverter.ToMat converteMat = new OpenCVFrameConverter.ToMat();
 
+		confereExistenciaFace.detectaFace(files);
+		documentoService.deletar(idUsuario);
+		
+		
 		for (MultipartFile file : files) {
 
 			InputStream inputStream = file.getInputStream();

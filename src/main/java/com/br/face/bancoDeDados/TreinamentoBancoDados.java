@@ -14,8 +14,8 @@ import org.bytedeco.opencv.opencv_core.MatVector;
 import org.bytedeco.opencv.opencv_core.Size;
 import org.bytedeco.opencv.opencv_face.EigenFaceRecognizer;
 import org.bytedeco.opencv.opencv_face.FaceRecognizer;
-import org.bytedeco.opencv.opencv_face.FisherFaceRecognizer;
-import org.bytedeco.opencv.opencv_face.LBPHFaceRecognizer;
+/*import org.bytedeco.opencv.opencv_face.FisherFaceRecognizer;
+import org.bytedeco.opencv.opencv_face.LBPHFaceRecognizer;*/
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,22 +53,22 @@ public class TreinamentoBancoDados {
 		if (classificadorEigenFaces.exists())
 			classificadorEigenFaces.delete();
 
-		File classificadorFisherFaces = new File("src/main/java/recursos/classificadorFisherFaces.yml");
-		if (classificadorFisherFaces.exists())
-			classificadorFisherFaces.delete();
-
-		File classificadorLBPH = new File("src/main/java/recursos/classificadorLBPH.yml");
-		if (classificadorLBPH.exists())
-			classificadorLBPH.delete();
+//		File classificadorFisherFaces = new File("src/main/java/recursos/classificadorFisherFaces.yml");
+//		if (classificadorFisherFaces.exists())
+//			classificadorFisherFaces.delete();
+//
+//		File classificadorLBPH = new File("src/main/java/recursos/classificadorLBPH.yml");
+//		if (classificadorLBPH.exists())
+//			classificadorLBPH.delete();
 		FaceRecognizer eigenfaces = EigenFaceRecognizer.create();
-		FaceRecognizer fisherfaces = FisherFaceRecognizer.create();
-		FaceRecognizer lbph = LBPHFaceRecognizer.create(15, 13, 13, 18, 1);
+		//FaceRecognizer fisherfaces = FisherFaceRecognizer.create();
+		//FaceRecognizer lbph = LBPHFaceRecognizer.create(15, 13, 13, 18, 1);
 
 		eigenfaces.train(fotos, rotulos);
 		eigenfaces.save("src/main/java/recursos/classificadorEigenFaces.yml");
-		fisherfaces.train(fotos, rotulos);
-		fisherfaces.save("src/main/java/recursos/classificadorFisherFaces.yml");
-		lbph.train(fotos, rotulos);
-		lbph.save("src/main/java/recursos/classificadorLBPH.yml");
+//		fisherfaces.train(fotos, rotulos);
+//		fisherfaces.save("src/main/java/recursos/classificadorFisherFaces.yml");
+//		lbph.train(fotos, rotulos);
+//		lbph.save("src/main/java/recursos/classificadorLBPH.yml");
 	}
 }

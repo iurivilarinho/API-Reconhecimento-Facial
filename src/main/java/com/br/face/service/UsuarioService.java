@@ -22,12 +22,12 @@ public class UsuarioService {
 		return usuarioRepository.save(new Usuario());
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Usuario> buscar() {
 		return usuarioRepository.findAll();
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public Usuario buscarUsuarioPorId(Long id) {
 		return usuarioRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado para o ID " + id));
