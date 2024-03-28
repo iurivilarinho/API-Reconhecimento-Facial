@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.br.face.models.Usuario;
+import com.br.face.models.UsuarioDTO;
 import com.br.face.service.UsuarioService;
 
 @Service
@@ -47,7 +48,7 @@ public class ReconhecimentoApi {
 	private int thresholdConfianca;
 
 	@Transactional(readOnly = true)
-	public Usuario reconhecer(List<MultipartFile> files) throws IOException {
+	public UsuarioDTO reconhecer(List<MultipartFile> files) throws IOException {
 
 		System.setProperty("java.awt.headless", "false");
 
@@ -150,9 +151,14 @@ public class ReconhecimentoApi {
 					}
 					return 0; // Não há empate, então não há necessidade de comparação de confiabilidade
 				}).findFirst();
+
+		Optional<Usuario> usuarioSelecionado = entry.map(Map.Entry::getKey);
 		// Retornando o usuário mais frequente, ou null se a lista estiver vazia
-		return entry.map(Map.Entry::getKey).orElse(null);
 
+		if (usuarioSelecionado.isPresent()) {
+			return new UsuarioDTO(usuarioSelecionado.get(), confiabilidade.get(usuarioSelecionado.get()).intValue());
+		} else {
+			return null;
+		}
 	}
-
 }

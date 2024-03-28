@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.br.face.bancoDeDados.api.CapturaApi;
 import com.br.face.bancoDeDados.api.ReconhecimentoApi;
-import com.br.face.models.Usuario;
+import com.br.face.models.UsuarioDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
@@ -39,7 +39,7 @@ public class ReconheceController {
 
 	@PostMapping(consumes = "multipart/form-data")
 	@Operation(summary = "Reconhecer Usuário", description = "Endpoint para reconhecer um usuário com base nas imagens fornecidas.")
-	public ResponseEntity<Usuario> reconhecer(@RequestPart List<MultipartFile> files) throws IOException {
+	public ResponseEntity<UsuarioDTO> reconhecer(@RequestPart List<MultipartFile> files) throws IOException {
 
 		if (files.size() > qtdImagensReconhecimento || files.size() < qtdImagensReconhecimento) {
 
@@ -47,7 +47,7 @@ public class ReconheceController {
 					"o número de imagens deve ser igual a " + qtdImagensReconhecimento.toString() + " !");
 		}
 
-		Usuario usuario = reconhecimentoApi.reconhecer(files);
+		UsuarioDTO usuario = reconhecimentoApi.reconhecer(files);
 		if (usuario != null) {
 			return ResponseEntity.ok(usuario);
 		} else {
