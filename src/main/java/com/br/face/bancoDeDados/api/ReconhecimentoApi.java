@@ -27,6 +27,7 @@ import org.bytedeco.opencv.opencv_core.Scalar;
 import org.bytedeco.opencv.opencv_core.Size;
 import org.bytedeco.opencv.opencv_face.EigenFaceRecognizer;
 import org.bytedeco.opencv.opencv_face.FaceRecognizer;
+import org.bytedeco.opencv.opencv_face.LBPHFaceRecognizer;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,8 +74,11 @@ public class ReconhecimentoApi {
 			CascadeClassifier detectorFace = new CascadeClassifier(
 					"src/main/java/recursos/haarcascade_frontalface_alt.xml");
 
-			FaceRecognizer reconhecedor = EigenFaceRecognizer.create(); // *antes: createEigenFaceRecognizer();
-			reconhecedor.read("src/main/java/recursos/classificadorEigenFaces.yml"); // *antes: load()
+//			FaceRecognizer reconhecedor = EigenFaceRecognizer.create(); // *antes: createEigenFaceRecognizer();
+//			reconhecedor.read("src/main/java/recursos/classificadorEigenFaces.yml"); // *antes: load()
+
+			FaceRecognizer reconhecedor = LBPHFaceRecognizer.create(1, 8, 8, 8, 100);
+			reconhecedor.read("src/main/java/recursos/classificadorLBPH.yml");
 
 			Mat imagemColorida = new Mat();
 
@@ -156,7 +160,8 @@ public class ReconhecimentoApi {
 		// Retornando o usuário mais frequente, ou null se a lista estiver vazia
 
 		if (usuarioSelecionado.isPresent()) {
-			return new UsuarioDTO(usuarioSelecionado.get(), confiabilidade.get(usuarioSelecionado.get()).intValue());
+			return new UsuarioDTO(usuarioSelecionado.get(), confiabilidade.get(usuarioSelecionado.get()).intValue(),
+					null);
 		} else {
 			return null;
 		}

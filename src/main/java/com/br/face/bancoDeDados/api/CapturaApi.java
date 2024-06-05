@@ -72,7 +72,7 @@ public class CapturaApi {
 			Frame frame = grabber.grab();
 
 			CascadeClassifier detectorFace = new CascadeClassifier(
-					"C:/opencv/sources/data/haarcascades/haarcascade_frontalface_alt.xml");
+					"src/main/java/recursos/haarcascade_frontalface_alt.xml");
 
 			Mat imagemColorida = new Mat();
 			int amostra = 1;

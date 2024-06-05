@@ -2,24 +2,37 @@ package com.br.face.models;
 
 public class UsuarioDTO {
 
-	private Long id;
+	private Long idUsuario;
 
 	private String nome;
 
 	private Integer confianca;
 
-	public UsuarioDTO(Usuario usuario, Integer confianca) {
-		this.id = usuario.getId();
+	private String idSessao;
+
+	private Boolean reconhecido;
+
+	public UsuarioDTO(Usuario usuario, Integer confianca, Boolean reconhecido) {
+		this.idUsuario = usuario.getId();
 		this.nome = usuario.getNome();
 		this.confianca = confianca;
+		this.reconhecido = reconhecido;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getIdUsuario() {
+		return idUsuario;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setIdUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+	public String getIdSessao() {
+		return idSessao;
+	}
+
+	public void setIdSessao(String idSessao) {
+		this.idSessao = idSessao;
 	}
 
 	public String getNome() {
@@ -36,6 +49,14 @@ public class UsuarioDTO {
 
 	public void setConfianca(Integer confianca) {
 		this.confianca = confianca;
+	}
+
+	public Boolean getReconhecido() {
+		return reconhecido;
+	}
+
+	public void setReconhecido(Boolean reconhecido) {
+		this.reconhecido = reconhecido;
 	}
 
 }
